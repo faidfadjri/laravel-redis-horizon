@@ -14,7 +14,12 @@ DB_USERNAME=YOUR_DATABASE_USERNAME
 DB_PASSWORD=YOUR_DATABASE_PASSWORD
 ```
 
-Install Dependencies using [**composer**](https://laravel.com/docs/10.x/passport)
+Setup project using one command (using makefile script) it will run several command :
+- composer install
+- php artisan migrate
+- php artisan migrate:refresh
+- php artisan db:seed
+
 ```bash
 make setup
 ```
