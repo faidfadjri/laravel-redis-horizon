@@ -41,11 +41,13 @@ COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 
 # Copy all files
 COPY . .
-RUN composer install
 
 # Set permissions for Laravel storage and bootstrap cache
-RUN chown -R www-data:www-data /var/www/app/storage /var/www/app/bootstrap/cache \
-    && chmod -R 775 /var/www/app/storage /var/www/app/bootstrap/cache
+RUN chown -R www-data:www-data * \
+    && chmod -R 775 /var/www/app/storage/ /var/www/app/bootstrap/cache \
+    /var/www/app/storage/framework/sessions
+
+RUN composer install
 
 # Set the default command to run php-fpm
 CMD ["php-fpm"]
