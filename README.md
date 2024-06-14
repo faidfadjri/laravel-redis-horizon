@@ -103,7 +103,7 @@ docker exec -it laravel-php make setup
 
 BASE URL on `http://localhost:7000`
 
-## Implementation
+## Implementation 🚀
 
 #### Get User Json Web Token
 
