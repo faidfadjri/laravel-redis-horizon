@@ -31,7 +31,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql bcmath zip
+RUN docker-php-ext-install pdo pdo_mysql bcmath zip pcntl
 
 # Install Redis PHP extension
 RUN pecl install redis && docker-php-ext-enable redis
@@ -43,9 +43,10 @@ COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 COPY . .
 
 # Set permissions for Laravel storage and bootstrap cache
-RUN chown -R www-data:www-data * \
-    && chmod -R 775 /var/www/app/storage/ /var/www/app/bootstrap/cache \
-    /var/www/app/storage/framework/sessions
+RUN chown -R www-data:www-data /var/www/app/storage \
+    && chown -R www-data:www-data /var/www/app/bootstrap/cache \
+    && chmod -R 775 /var/www/app/storage \
+    && chmod -R 775 /var/www/app/bootstrap 
 
 RUN composer install
 

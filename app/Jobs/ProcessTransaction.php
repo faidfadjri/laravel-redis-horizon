@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessTransaction implements ShouldQueue
 {
@@ -31,6 +32,7 @@ class ProcessTransaction implements ShouldQueue
         // Simulate transaction processing
         $success = rand(0, 1); // Randomly simulate success or failure
 
+        Log::debug("Running queue job");
         if ($success) {
             $this->transaction->update(['status' => 'completed']);
         } else {
