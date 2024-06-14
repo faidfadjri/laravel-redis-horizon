@@ -81,6 +81,8 @@ Access URL `http://localhost:8000`
 <img src="https://www.docker.com/wp-content/uploads/2023/05/symbol_blue-docker-logo.png" alt="Docker Logo"
     width="80" />
 
+copy `.config/.env.docker` and renamed it to `.env`
+
 Build Docker Image
 
 ```bash
@@ -92,6 +94,8 @@ Create Instance of Image ( Container ) and run it
 ```bash
 docker-compose up -d
 ```
+
+Migrate database and seeding
 
 ```bash
 docker exec -it laravel-php make setup
