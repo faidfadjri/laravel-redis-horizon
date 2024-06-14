@@ -40,7 +40,12 @@ COPY composer.json composer.lock ./
 RUN composer install
 
 
+
+# Copy supervisor configuration file
+COPY ./.config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+
 EXPOSE 9000
 
 # Set the default command to run php-fpm
-CMD ["php-fpm"]
+CMD ["/usr/bin/supervisord"]
