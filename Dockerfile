@@ -1,51 +1,53 @@
-# use PHP 8.2
+# Use PHP 8.2
 FROM php:8.2.11-fpm
 
-RUN docker-php-ext-install pdo pdo_mysql
-
-# Update package manager and install useful tools
-RUN apt-get update && apt-get -y install apt-utils nano wget dialog vim
-
-# Install important libraries
-RUN echo "Install important libraries"
-RUN apt-get -y install --fix-missing \
-    apt-utils \
-    build-essential \
-    git \
-    curl \
-    libcurl4 \
-    libcurl4-openssl-dev \
-    zlib1g-dev \
-    libzip-dev \
-    zip \
-    libbz2-dev \
-    locales \
-    libmcrypt-dev \
-    libicu-dev \
-    libonig-dev \
-    libxml2-dev
-
-# Clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Set the working directory
-COPY . /var/www/app
 WORKDIR /var/www/app
 
-# install composer
+# Install important libraries and tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        apt-utils \
+        build-essential \
+        git \
+        curl \
+        libcurl4 \
+        libcurl4-openssl-dev \
+        zlib1g-dev \
+        libzip-dev \
+        zip \
+        unzip \
+        libbz2-dev \
+        locales \
+        libmcrypt-dev \
+        libicu-dev \
+        libonig-dev \
+        libxml2-dev \
+        redis-tools \
+        nano \
+        wget \
+        dialog \
+        vim && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_mysql bcmath zip
+
+# Install Redis PHP extension
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install Composer
 COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
 
-# copy composer.json to workdir & install dependencies
+# Copy composer.json and composer.lock to workdir & install dependencies
 COPY composer.json composer.lock ./
-RUN composer install
+RUN composer install --no-dev --optimize-autoloader
 
+# Copy other project files
+COPY . .
 
-
-# Copy supervisor configuration file
-COPY ./.config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-
-EXPOSE 9000
+# Expose port 9000 (if needed for PHP-FPM, uncomment if necessary)
+# EXPOSE 9000
 
 # Set the default command to run php-fpm
-CMD ["/usr/bin/supervisord"]
+CMD ["php-fpm"]

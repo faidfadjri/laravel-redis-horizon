@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     tty: true
     expose:
-      - "9000:9000"
+      - "9000"
     volumes:
       - .:/var/www/app
     networks:
@@ -58,6 +58,38 @@ services:
     image: redis:alpine
     container_name: laravel-redis
     restart: unless-stopped
+    networks:
+      - laravel-redis-horizon
+
+  horizon:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-horizon
+    restart: unless-stopped
+    depends_on:
+      - laravel-php
+      - laravel-redis
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/var/www/app
+    command: ["php", "/var/www/html/artisan", "horizon"]
+    networks:
+      - laravel-redis-horizon
+
+  queue-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-queue-worker
+    restart: unless-stopped
+    depends_on:
+      - laravel-php
+      - laravel-redis
+    volumes:
+      - .:/var/www/app
+    command: ["php", "/var/www/html/artisan", "queue:work"]
     networks:
       - laravel-redis-horizon
 
