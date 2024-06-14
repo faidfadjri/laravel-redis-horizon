@@ -27,5 +27,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth:api'])->prefix('transaction')->group(function () {
         Route::post('payment', [PaymentController::class, 'payment']);
+        Route::get('history', [PaymentController::class, 'history']);
+        Route::get('summary', [PaymentController::class, 'summary']);
     });
 });
