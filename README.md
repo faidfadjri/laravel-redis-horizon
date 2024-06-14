@@ -19,6 +19,7 @@ Setup project using one command (using makefile script) it will run several comm
 - php artisan migrate
 - php artisan migrate:refresh
 - php artisan db:seed
+- php artisan passport:install
 
 ```bash
 make setup

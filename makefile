@@ -13,6 +13,9 @@ db-migrate:
 install:
 	composer install
 
+install-passport:
+	php artisan passport:install
+
 refresh:
 	@make db-refresh
 	@make db-seed
@@ -21,3 +24,4 @@ setup:
 	@make install
 	@make db-migrate
 	@make refresh
+	@make install-passport
