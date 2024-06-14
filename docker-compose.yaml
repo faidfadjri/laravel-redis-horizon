@@ -54,7 +54,7 @@ services:
     networks:
       - laravel-redis-horizon
 
-  laravel-redis:
+  laravel-redis: # become the HOST
     image: redis:alpine
     container_name: laravel-redis
     restart: unless-stopped
