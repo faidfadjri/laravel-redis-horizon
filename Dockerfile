@@ -1,28 +1,37 @@
-# use PHP 8.2
+# Use PHP 8.2
 FROM php:8.2-fpm
 
 # Install common php extension dependencies
 RUN apt-get update && apt-get install -y \
-    libfreetype-dev \
-    libjpeg62-turbo-dev \
+    build-essential \
     libpng-dev \
-    zlib1g-dev \
-    libzip-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    locales \
+    zip \
+    jpegoptim optipng pngquant gifsicle \
+    vim \
     unzip \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install zip
+    git \
+    curl \
+    docker-php-ext-install mysqli pdo pdo_mysql
+
 
 # Set the working directory
-COPY . /var/www/app
 WORKDIR /var/www/app
 
-# install composer
-COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
-
-# copy composer.json to workdir & install dependencies
+# Copy composer.json and composer.lock separately to leverage Docker cache
 COPY composer.json composer.lock ./
-RUN composer install
+
+# Install composer dependencies
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer install --no-scripts --no-autoloader
+
+# Copy the rest of the application code
+COPY . .
+
+# Run composer with full optimizations
+RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 # Set the default command to run php-fpm
 CMD ["php-fpm"]

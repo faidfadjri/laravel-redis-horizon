@@ -17,6 +17,8 @@ services:
       - .:/var/www/app
     depends_on:
       - laravel-php
+      - laravel-mysql
+      - laravel-redis
     networks:
       - laravel-redis-horizon
 
@@ -33,3 +35,29 @@ services:
       - .:/var/www/app
     networks:
       - laravel-redis-horizon
+
+  laravel-mysql:
+    image: mysql:5.7
+    container_name: laravel-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: docker_mysql_password
+      MYSQL_DATABASE: laravel_redis_horizon
+      MYSQL_USER: faidfadjri
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - laravel-redis-horizon
+
+  laravel-redis:
+    image: redis:alpine
+    container_name: laravel-redis
+    restart: unless-stopped
+    networks:
+      - laravel-redis-horizon
+
+volumes:
+  mysql_data:
