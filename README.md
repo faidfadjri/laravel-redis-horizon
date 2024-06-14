@@ -7,6 +7,7 @@
 
 #### Composer Dependencies 🍹
 - [Laravel Passport](https://laravel.com/docs/10.x/passport)
+- [Laravel Horizon](https://laravel.com/docs/10.x/horizon)
 - [Predis](https://packagist.org/packages/predis/predis)
 
 

@@ -16,6 +16,9 @@ install:
 install-passport:
 	php artisan passport:install
 
+install-horizon:
+	php artisan horizon:install
+
 refresh:
 	@make db-refresh
 	@make db-seed
@@ -25,3 +28,4 @@ setup:
 	@make db-migrate
 	@make refresh
 	@make install-passport
+	@make install-horizon
