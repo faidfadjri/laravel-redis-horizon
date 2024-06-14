@@ -1,37 +1,46 @@
-# Use PHP 8.2
-FROM php:8.2-fpm
+# use PHP 8.2
+FROM php:8.2.11-fpm
 
-# Install common php extension dependencies
-RUN apt-get update && apt-get install -y \
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Update package manager and install useful tools
+RUN apt-get update && apt-get -y install apt-utils nano wget dialog vim
+
+# Install important libraries
+RUN echo "Install important libraries"
+RUN apt-get -y install --fix-missing \
+    apt-utils \
     build-essential \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    locales \
-    zip \
-    jpegoptim optipng pngquant gifsicle \
-    vim \
-    unzip \
     git \
     curl \
-    docker-php-ext-install mysqli pdo pdo_mysql
+    libcurl4 \
+    libcurl4-openssl-dev \
+    zlib1g-dev \
+    libzip-dev \
+    zip \
+    libbz2-dev \
+    locales \
+    libmcrypt-dev \
+    libicu-dev \
+    libonig-dev \
+    libxml2-dev
 
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
+COPY . /var/www/app
 WORKDIR /var/www/app
 
-# Copy composer.json and composer.lock separately to leverage Docker cache
+# install composer
+COPY --from=composer:2.6.5 /usr/bin/composer /usr/local/bin/composer
+
+# copy composer.json to workdir & install dependencies
 COPY composer.json composer.lock ./
+RUN composer install
 
-# Install composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-scripts --no-autoloader
 
-# Copy the rest of the application code
-COPY . .
-
-# Run composer with full optimizations
-RUN composer dump-autoload --no-scripts --no-dev --optimize
+EXPOSE 9000
 
 # Set the default command to run php-fpm
 CMD ["php-fpm"]

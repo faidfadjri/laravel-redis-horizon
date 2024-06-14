@@ -29,3 +29,9 @@ setup:
 	@make refresh
 	@make install-passport
 	@make install-horizon
+
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down

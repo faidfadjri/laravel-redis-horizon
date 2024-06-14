@@ -12,7 +12,7 @@
 
 
 #### Installation Guide 🏒
-
+##### #1 Without *Docker*
 Clone Repository
 ```bash
 git clone https://github.com/faidfadjri/laravel-redis-horizon.git
@@ -54,3 +54,19 @@ Open new terminal for running the Queue Manager
 ```bash
 php artisan queue:work redis --queue=default
 ```
+##### #2 Using *Docker*
+<img src="https://www.docker.com/wp-content/uploads/2023/05/symbol_blue-docker-logo.png" alt="Docker Logo"
+    width="80" />
+
+
+Build Docker Image
+```bash
+docker-compose build
+```
+
+Create Instance of Image ( Container ) and run it
+```bash
+make up
+```
+
+access URL on `http://localhost:7000`

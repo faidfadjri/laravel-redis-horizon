@@ -5,6 +5,20 @@ networks:
     driver: bridge
 
 services:
+  laravel-php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel-php
+    restart: unless-stopped
+    tty: true
+    expose:
+      - "9000:9000"
+    volumes:
+      - .:/var/www/app
+    networks:
+      - laravel-redis-horizon
+
   laravel-nginx:
     image: nginx:alpine
     container_name: laravel-nginx
@@ -22,20 +36,6 @@ services:
     networks:
       - laravel-redis-horizon
 
-  laravel-php:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel-php
-    restart: unless-stopped
-    tty: true
-    expose:
-      - "9000"
-    volumes:
-      - .:/var/www/app
-    networks:
-      - laravel-redis-horizon
-
   laravel-mysql:
     image: mysql:5.7
     container_name: laravel-mysql
@@ -45,6 +45,8 @@ services:
       MYSQL_DATABASE: laravel_redis_horizon
       MYSQL_USER: faidfadjri
       MYSQL_PASSWORD: password
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
