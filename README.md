@@ -1,6 +1,16 @@
 # Laravel Redis Queue with Horizon
 
-### Installation Guide
+
+#### Services 🐕‍🦺
+- [MySQL](https://www.mysql.com/)
+- [Redis](https://redis.io/)
+
+#### Composer Dependencies 🍹
+- [Laravel Passport](https://laravel.com/docs/10.x/passport)
+- [Predis](https://packagist.org/packages/predis/predis)
+
+
+#### Installation Guide 🏒
 
 Clone Repository
 ```bash
@@ -26,3 +36,13 @@ make setup
 ```
 
 > use makefile to simplify the Artisan command you can check it out on **makefile**
+
+
+Open new terminal and run the Redis Server
+```bash
+redis-server
+```
+Open new terminal for running the queue job
+```bash
+php artisan queue:work redis --queue=default
+```
