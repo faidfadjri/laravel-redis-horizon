@@ -13,7 +13,7 @@ class TransactionTest extends TestCase
 
     public function testCreatingTransaction()
     {
-        $user        = User::first();
+        $user = User::factory()->create();
         $transaction = Transaction::factory()->create(['user_id' => $user->id]);
 
         $this->assertDatabaseHas('transactions', [

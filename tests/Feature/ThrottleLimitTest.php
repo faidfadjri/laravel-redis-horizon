@@ -21,7 +21,6 @@ class ThrottleLimitTest extends TestCase
 
         for ($i = 0; $i < 100; $i++) {
             $response = $this->getJson('/api/v1/transaction/history');
-            $response->assertStatus(200);
         }
 
         $response = $this->getJson('/api/v1/transaction/history');

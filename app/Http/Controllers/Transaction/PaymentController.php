@@ -40,6 +40,34 @@ class PaymentController extends Controller
         }
     }
 
+
+    public function history()
+    {
+        try {
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json([
+                    'message' => 'User not authenticated',
+                ], 401);
+            }
+
+            $transactionHistory = Transaction::where('user_id', $user->id)->paginate(10);
+
+            return response()->json([
+                'message' => "Getting user's transaction history succeeded",
+                'data'    => $transactionHistory
+            ], 200);
+        } catch (Exception $err) {
+            return response()->json([
+                'message' => 'Something went wrong',
+                'error'   => $err->getMessage()
+            ], 500);
+        }
+    }
+
+
+
     public function summary()
     {
         try {

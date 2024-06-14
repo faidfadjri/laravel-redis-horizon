@@ -19,7 +19,7 @@ class AuthorizationTest extends TestCase
 
     public function testAuthorizedAccess()
     {
-        $user = User::first();
+        $user = User::factory()->create();
         Passport::actingAs($user);
 
         $response = $this->getJson('/api/v1/transaction/history');
