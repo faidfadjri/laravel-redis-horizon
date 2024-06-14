@@ -22,6 +22,13 @@ Rename **.env.example** to **.env** and set your database configuration
 DB_DATABASE=YOUR_DATABASE_NAME
 DB_USERNAME=YOUR_DATABASE_USERNAME
 DB_PASSWORD=YOUR_DATABASE_PASSWORD
+
+QUEUE_CONNECTION=redis
+REDIS_CLIENT=predis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+REDIS_DB=0
 ```
 
 Setup project using one command (using makefile script) it will run several command :
@@ -42,7 +49,7 @@ Open new terminal and run the Redis Server
 ```bash
 redis-server
 ```
-Open new terminal for running the queue job
+Open new terminal for running the Queue Manager
 ```bash
 php artisan queue:work redis --queue=default
 ```
