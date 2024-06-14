@@ -1,18 +1,18 @@
 # Laravel Redis Queue with Horizon
 
-#### Services 🐕‍🦺
+## Services 🐕‍🦺
 
 -   [MySQL](https://www.mysql.com/)
 -   [Redis](https://redis.io/)
 -   [Docker _(optional)_](https://www.docker.com/)
 
-#### Composer Dependencies 🍹
+## Composer Dependencies 🍹
 
 -   [Laravel Passport](https://laravel.com/docs/10.x/passport)
 -   [Laravel Horizon](https://laravel.com/docs/10.x/horizon)
 -   [Predis](https://packagist.org/packages/predis/predis)
 
-#### Installation Guide 🏒
+## Installation Guide 🏒
 
 ##### #1 Without _Docker_
 
@@ -74,7 +74,7 @@ Open new terminal for Running artisan
 php artisan serve
 ```
 
-Access URL `http://localhost:8000`
+BASE URL `http://localhost:8000`
 
 ##### #2 Using _Docker_
 
@@ -101,4 +101,54 @@ Migrate database and seeding
 docker exec -it laravel-php make setup
 ```
 
-access URL on `http://localhost:7000`
+BASE URL on `http://localhost:7000`
+
+## Implementation
+
+#### Get User Json Web Token
+
+```http
+  POST /api/v1/auth/login
+```
+
+| Parameter  | Type     | Description  | Note                          |
+| :--------- | :------- | :----------- | ----------------------------- |
+| `email`    | `string` | `email`      | **Required**                  |
+| `password` | `string` | `plain-text` | **Required** : thisispassword |
+
+#### User Payment Request
+
+```http
+  POST /api/v1/transaction/payment
+```
+
+| Parameter | Type      | Description | Note         |
+| :-------- | :-------- | :---------- | ------------ |
+| `amount`  | `integer` | `email`     | **Required** |
+
+| Header          | Type               | Description         | Note         |
+| :-------------- | :----------------- | :------------------ | ------------ |
+| `Authorization` | `JWT`              | `Authentication`    | **Required** |
+| `Accept`        | `Application/Json` | `Get JSON response` | **Required** |
+
+#### User Transaction History
+
+```http
+  GET /api/v1/transaction/history
+```
+
+| Header          | Type               | Description         | Note         |
+| :-------------- | :----------------- | :------------------ | ------------ |
+| `Authorization` | `JWT`              | `Authentication`    | **Required** |
+| `Accept`        | `Application/Json` | `Get JSON response` | **Required** |
+
+#### User Transaction Summary
+
+```http
+  GET /api/v1/transaction/summary
+```
+
+| Header          | Type               | Description         | Note         |
+| :-------------- | :----------------- | :------------------ | ------------ |
+| `Authorization` | `JWT`              | `Authentication`    | **Required** |
+| `Accept`        | `Application/Json` | `Get JSON response` | **Required** |
